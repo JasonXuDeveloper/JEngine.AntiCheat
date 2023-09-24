@@ -32,32 +32,31 @@ namespace JEngine.AntiCheat
 {
     public struct JFloat
     {
-        private float _obscuredFloat;
+        private uint _obscuredFloat;
         private int _obscuredKey;
-        private float _originalValue;
+        private uint _originalValue;
 
-        private float Value
+        private unsafe float Value
         {
             get
             {
-                var result = _obscuredFloat-_obscuredKey;
-                var invalid = _originalValue > result
-                    ? _originalValue - result > 0.0001
-                    : result - _originalValue > 0.0001;
+                uint result = _obscuredDouble - (uint)_obscuredKey;
+                var invalid = _originalValue != result;
                 if (invalid)
                 {
                     AntiCheatHelper.OnDetected();
                 }
-                return result;
+
+                return *(float*)&result;
             }
-            
+
             set
             {
-                _originalValue = value;
+                _originalValue = *(uint*)&value;
                 unchecked
                 {
                     _obscuredKey = JRandom.RandomNum((int)value);
-                    _obscuredFloat = value + _obscuredKey;
+                    _obscuredDouble = _originalValue + (uint)_obscuredKey;
                 }
             }
         }

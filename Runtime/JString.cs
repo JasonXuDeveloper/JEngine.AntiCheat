@@ -36,6 +36,7 @@ namespace JEngine.AntiCheat
         private string Value {
             get
             {
+                if (_obscuredString == null) return null;
                 var result = CryptoMgr.DecryptStr(_obscuredString,InitJEngine.Instance.key);
                 if (!_originalValue.Equals(result))
                 {
@@ -49,6 +50,11 @@ namespace JEngine.AntiCheat
                 _originalValue = value;
                 unchecked
                 {
+                    if (value == null)
+                    {
+                        _obscuredString = null;
+                        return;
+                    }
                     _obscuredString = CryptoMgr.EncryptStr(value, InitJEngine.Instance.key);
                 }
             }
