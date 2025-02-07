@@ -52,7 +52,7 @@ namespace JEngine.AntiCheat
                 unchecked
                 {
                     _randomValue = JRandom.RandomNum(1024);
-                    _value = value ? 1 : 0 + _randomValue;
+                    _value = (value ? 1 : 0) + _randomValue;
                 }
             }
             
